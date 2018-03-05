@@ -1,5 +1,4 @@
-# AWS Certificate Module
-
+# AWS Certificate Module [![CircleCI](https://circleci.com/gh/jpamies/terraform-aws-certificate.svg?style=svg)](https://circleci.com/gh/jpamies/terraform-aws-certificate)
 This repo contains a Module to create AWS certificates and validate them  using route53 with terraform.
 
 This module allows you to create SSL certificates without interaction, 100% with terraform.

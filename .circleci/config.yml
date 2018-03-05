@@ -1,0 +1,23 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: hashicorp/terraform:latest
+    working_directory: /app/
+    steps:
+      - checkout
+      - run:
+          name: Check Format
+          command: terraform fmt -check=true
+      - run:
+          name: Copy test variables
+          command: cp tests/terraform.tfvars .
+      - run:
+          name: Init terraform
+          command: terraform init
+      - run:
+          name: Validate terraform files
+          command: terraform validate
+      - run:
+          name: Terraform plan
+          command: terraform plan
