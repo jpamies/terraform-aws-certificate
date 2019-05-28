@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: hashicorp/terraform:latest
+      - image: hashicorp/terraform:0.11.14
     working_directory: /app/
     steps:
       - checkout

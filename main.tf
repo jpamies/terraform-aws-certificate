@@ -25,11 +25,11 @@ resource "aws_acm_certificate_validation" "this" {
 # We're using the list of the SAN + the main domain as a workaround
 # count      = "${length(var.subject_alternative_names)+1}"
 resource "aws_route53_record" "cert_validation" {
-  count   = "${length(var.subject_alternative_names)+1}"
-  name    = "${lookup(aws_acm_certificate.this.domain_validation_options[count.index],"resource_record_name")}"
-  type    = "CNAME"
-  zone_id = "${var.dns_zone_id}"
-
-  records = ["${lookup(aws_acm_certificate.this.domain_validation_options[count.index],"resource_record_value")}"]
-  ttl     = "${var.dns_ttl}"
+  count           = "${length(var.subject_alternative_names)+1}"
+  name            = "${lookup(aws_acm_certificate.this.domain_validation_options[count.index],"resource_record_name")}"
+  type            = "CNAME"
+  allow_overwrite = true
+  zone_id         = "${var.dns_zone_id}"
+  records         = ["${lookup(aws_acm_certificate.this.domain_validation_options[count.index],"resource_record_value")}"]
+  ttl             = "${var.dns_ttl}"
 }
