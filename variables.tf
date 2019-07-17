@@ -34,6 +34,6 @@ variable "tags" {
 
 variable "subject_alternative_names" {
   description = "Alternate domain names  for the SSL certificate"
-  type        = "list"
+  type        = list(string)
   default     = []
 }
