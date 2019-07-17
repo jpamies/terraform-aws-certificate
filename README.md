@@ -10,6 +10,9 @@ This module can be used to create wildcard certificates, certificates with multi
 - FAIL -> `jpamies.com`, `.jordi.com`
 
 All the requested domains should be managed by the same Route53 zone.
+## Requirements
+
+- Terraform version < 0.12
 
 ## How to use this Module
 
