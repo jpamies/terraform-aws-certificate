@@ -2,11 +2,14 @@ provider "aws" {
   region = "us-east-1"
 }
 
-variable "domain_zone_id" {}
-variable "domain" {}
+variable "domain_zone_id" {
+}
+
+variable "domain" {
+}
 
 variable "alternate_domains" {
-  type = "list"
+  type = list(string)
 }
 
 variable "tags" {
@@ -14,11 +17,11 @@ variable "tags" {
 }
 
 module "cert" {
-  source                    = ".."
-  domain_name               = "${var.domain}"
-  subject_alternative_names = ["${var.alternate_domains}"]
-  dns_zone_id               = "${var.domain_zone_id}"
-  tags                      = "${var.tags}"
+  source                    = "./.."
+  domain_name               = var.domain
+  subject_alternative_names = var.alternate_domains
+  dns_zone_id               = var.domain_zone_id
+  tags                      = var.tags
 }
 
 ######
@@ -33,7 +36,7 @@ resource "aws_elb" "bar" {
     instance_protocol  = "http"
     lb_port            = 443
     lb_protocol        = "https"
-    ssl_certificate_id = "${module.cert.arn}"
+    ssl_certificate_id = module.cert.arn
   }
 
   instances                   = []
@@ -42,7 +45,7 @@ resource "aws_elb" "bar" {
   connection_draining         = true
   connection_draining_timeout = 400
 
-  tags {
+  tags = {
     Name = "cert-elb"
   }
 }
