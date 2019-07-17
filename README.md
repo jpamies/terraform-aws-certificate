@@ -19,14 +19,31 @@ All the requested domains should be managed by the same Route53 zone.
 ```hcl
 module "certificate" {
   source                    = "jpamies/certificate/aws"
-  domain_name               = "${var.domain}"
-  subject_alternative_names = ["${var.alternate_domains}"]
-  dns_zone_id               = "${var.domain_zone_id}"
-  tags                      = "${var.tags}"
+  version                   = "~>1.0"
+  domain_name               = var.domain
+  subject_alternative_names = var.alternate_domains
+  dns_zone_id               = var.domain_zone_id
+  tags                      = var.tags
 }
 ```
 
 Check [examples](https://github.com/jpamies/terraform-aws-certificate/tree/master/examples) to view a detailed working example.
+
+## Terraform < 0.12 compatibility
+
+To keep using latest stable version compatible with terraform < 0.12, [https://github.com/jpamies/terraform-aws-certificate/releases/tag/0.0.5](0.0.5). Using `~>0.0` as version you'll get all the hotfixes for old syntax.
+
+
+```hcl
+module "certificate" {
+  source                    = "jpamies/certificate/aws"
+  version                   = "~>0.0"
+  domain_name               = var.domain
+  subject_alternative_names = var.alternate_domains
+  dns_zone_id               = var.domain_zone_id
+  tags                      = var.tags
+}
+```
 
 
 ## How is structured this module
