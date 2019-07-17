@@ -12,7 +12,7 @@ This module can be used to create wildcard certificates, certificates with multi
 All the requested domains should be managed by the same Route53 zone.
 ## Requirements
 
-- Terraform version < 0.12
+- Terraform version >= 0.12
 
 ## How to use this Module
 
@@ -37,7 +37,7 @@ To keep using latest stable version compatible with terraform < 0.12, [https://g
 ```hcl
 module "certificate" {
   source                    = "jpamies/certificate/aws"
-  version                   = "~>0.0"
+  version                   = "~>0.1"
   domain_name               = var.domain
   subject_alternative_names = var.alternate_domains
   dns_zone_id               = var.domain_zone_id
@@ -61,10 +61,6 @@ This Module has the following folder structure:
 
 This Module follows the principles of [Semantic Versioning](http://semver.org/). You can find each new release,
 along with the changelog, in the [Releases Page](../../releases).
-
-During initial development, the major version will be 0 (e.g., `0.x.y`), which indicates the code does not yet have a
-stable API. Once we hit `1.0.0`, we will make every effort to maintain a backwards compatible API and use the MAJOR,
-MINOR, and PATCH versions on each release to indicate any incompatibilities.
 
 ## How do I contribute to this Module?
 
