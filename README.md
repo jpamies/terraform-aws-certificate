@@ -13,6 +13,7 @@ All the requested domains should be managed by the same Route53 zone.
 ## Requirements
 
 - Terraform version >= 0.12
+- Terraform AWS Provider version 2.X 
 
 ## How to use this Module
 
