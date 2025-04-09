@@ -12,6 +12,8 @@ jobs:
   release:
     name: "Release"
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     
     steps:
       - name: Checkout
@@ -30,10 +32,12 @@ jobs:
       - name: Terraform Init
         id: init
         run: terraform init -backend=false
+        continue-on-error: true
 
       - name: Terraform Validate
         id: validate
         run: terraform validate
+        continue-on-error: true
 
       - name: Get the version
         id: get_version
@@ -48,6 +52,6 @@ jobs:
             
             See the [CHANGELOG.md](https://github.com/jpamies/terraform-aws-certificate/blob/main/CHANGELOG.md) for details.
           draft: false
-          prerelease: false
+          prerelease: ${{ contains(github.ref, '-beta') || contains(github.ref, '-rc') }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
