@@ -1,0 +1,7 @@
+domain_zone_id = "Z1234567890ABC"
+domain = "example.com"
+alternate_domains = ["*.example.com", "app.example.com"]
+tags = {
+  Environment = "example"
+  Project = "certificate-demo"
+}

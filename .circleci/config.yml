@@ -1,23 +1,28 @@
-version: 2
+version: 2.1
+
+orbs:
+  terraform: circleci/terraform@3.2.1
+
 jobs:
-  build:
+  validate:
     docker:
-      - image: hashicorp/terraform:0.12.29
-    working_directory: /app/
+      - image: cimg/base:2023.03
     steps:
       - checkout
-      - run:
-          name: Check Format
-          command: terraform fmt -check=true
+      - terraform/install:
+          terraform_version: "1.5.7"
       - run:
           name: Copy test variables
           command: cp tests/terraform.tfvars .
-      - run:
-          name: Init terraform
-          command: terraform init
-      - run:
-          name: Validate terraform files
-          command: terraform validate
-      - run:
-          name: Terraform plan
-          command: terraform plan
+      - terraform/fmt:
+          check: true
+      - terraform/init
+      - terraform/validate
+      - terraform/plan:
+          path: .
+
+workflows:
+  version: 2
+  terraform:
+    jobs:
+      - validate
