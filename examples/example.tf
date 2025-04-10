@@ -40,10 +40,10 @@ resource "aws_lb" "example" {
   name               = "certificate-example-lb"
   internal           = false
   load_balancer_type = "application"
-  
+
   # Replace with your actual subnet IDs
-  subnets            = ["subnet-12345678", "subnet-87654321"]
-  
+  subnets = ["subnet-12345678", "subnet-87654321"]
+
   enable_deletion_protection = false
 
   tags = {
