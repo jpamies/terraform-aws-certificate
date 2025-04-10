@@ -32,12 +32,10 @@ jobs:
       - name: Terraform Init
         id: init
         run: terraform init -backend=false
-        continue-on-error: true
 
       - name: Terraform Validate
         id: validate
         run: terraform validate
-        continue-on-error: true
 
       - name: Get the version
         id: get_version

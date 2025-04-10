@@ -43,7 +43,6 @@ jobs:
       - name: Terraform Format
         id: fmt
         run: terraform fmt -check -recursive
-        continue-on-error: true
 
       - name: Prepare Test Environment
         run: |
@@ -62,19 +61,16 @@ jobs:
       - name: Terraform Init
         id: init
         run: terraform init -backend=false
-        continue-on-error: true
 
       - name: Terraform Validate
         id: validate
         run: terraform validate
-        continue-on-error: true
 
       - name: Terraform Plan (Syntax Check Only)
         id: plan
         run: |
           echo "Skipping actual plan execution for module testing"
           echo "Module syntax has been validated in previous steps"
-        continue-on-error: true
 
       - name: Update PR with Terraform Status
         uses: actions/github-script@v6
@@ -94,8 +90,3 @@ jobs:
               repo: context.repo.repo,
               body: output
             })
-
-      # Only fail the workflow if format check fails and we're not in a PR
-      - name: Terraform Format Status
-        if: steps.fmt.outcome == 'failure' && github.event_name != 'pull_request'
-        run: exit 1
