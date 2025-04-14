@@ -1,8 +1,8 @@
-domain_name = "tf-aws-cert.aws.jpamies.com"
+domain_name = "testdomain.com"
 
-dns_zone_id = "Z05904741BEE7WK7W9O8U"
+dns_zone_id = "TEST_ID"
 
-subject_alternative_names = ["v2.tf-aws-cert.aws.jpamies.com"]
+subject_alternative_names = ["alternate.testdomain.com"]
 
 tags = {
   environment = "test"
