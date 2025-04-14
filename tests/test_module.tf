@@ -1,18 +1,5 @@
 provider "aws" {
-  region = "us-east-1"
-  # Use mock credentials for testing
-  access_key                  = "mock_access_key"
-  secret_key                  = "mock_secret_key"
-  skip_credentials_validation = true
-  skip_requesting_account_id  = true
-  skip_metadata_api_check     = true
-  s3_use_path_style           = true
-
-  # Mock endpoints for local testing
-  endpoints {
-    acm     = "http://localhost:4566"
-    route53 = "http://localhost:4566"
-  }
+  region = "eu-south-2"
 }
 
 # Test the module with the test variables
