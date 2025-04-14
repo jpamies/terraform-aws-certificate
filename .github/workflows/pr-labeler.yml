@@ -1,0 +1,96 @@
+name: "PR Labeler"
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  label-pr:
+    name: "Label Pull Request"
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Label PR based on branch name
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = context.payload.pull_request;
+            const branch = pr.head.ref;
+            const title = pr.title;
+            const body = pr.body || '';
+            
+            // Labels to apply based on different criteria
+            const labels = [];
+            
+            // Check branch name patterns
+            if (branch.startsWith('feature/') || branch.startsWith('feat/')) {
+              labels.push('feature');
+            } else if (branch.startsWith('fix/') || branch.startsWith('bugfix/')) {
+              labels.push('bug');
+            } else if (branch.startsWith('docs/')) {
+              labels.push('documentation');
+            } else if (branch.startsWith('chore/') || branch.startsWith('refactor/')) {
+              labels.push('chore');
+            }
+            
+            // Check PR title patterns
+            if (title.toLowerCase().includes('feat:') || title.toLowerCase().includes('feature:')) {
+              if (!labels.includes('feature')) labels.push('feature');
+            } else if (title.toLowerCase().includes('fix:') || title.toLowerCase().includes('bug:')) {
+              if (!labels.includes('bug')) labels.push('bug');
+            } else if (title.toLowerCase().includes('docs:') || title.toLowerCase().includes('documentation:')) {
+              if (!labels.includes('documentation')) labels.push('documentation');
+            } else if (title.toLowerCase().includes('chore:') || title.toLowerCase().includes('refactor:')) {
+              if (!labels.includes('chore')) labels.push('chore');
+            }
+            
+            // Check for breaking changes
+            if (title.toLowerCase().includes('breaking change') || 
+                body.toLowerCase().includes('breaking change') ||
+                title.toLowerCase().includes('major')) {
+              labels.push('breaking');
+            }
+            
+            // Check for dependencies
+            if (title.toLowerCase().includes('deps:') || 
+                title.toLowerCase().includes('dependencies') ||
+                body.toLowerCase().includes('dependabot')) {
+              labels.push('dependencies');
+            }
+            
+            // Apply labels if any were determined
+            if (labels.length > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                labels: labels
+              });
+              console.log(`Applied labels: ${labels.join(', ')}`);
+            } else {
+              console.log('No labels to apply based on PR metadata');
+            }
+      
+      - name: Label Dependabot PRs
+        if: ${{ github.actor == 'dependabot[bot]' }}
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = context.payload.pull_request;
+            
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              labels: ['dependencies', 'automated']
+            });
+            console.log('Applied dependabot-specific labels');

@@ -9,6 +9,7 @@ This module creates AWS ACM certificates and validates them using Route53 DNS re
 - Support for wildcard certificates and multiple subdomains
 - Configurable key algorithm and validation timeout
 - Lifecycle management for certificate renewal
+- Fully automated dependency updates and releases
 
 ## Requirements
 
@@ -86,6 +87,19 @@ Check the [examples](https://github.com/jpamies/terraform-aws-certificate/tree/m
 ## Versioning
 
 This module follows [Semantic Versioning](http://semver.org/). See the [Releases Page](../../releases) for the changelog.
+
+## Automated Updates
+
+This module uses GitHub Actions to automate dependency updates and releases:
+
+- **Dependabot Integration**: Automatically creates PRs for outdated dependencies
+- **Automatic PR Labeling**: Labels PRs based on content and branch names
+- **Automatic Merging**: Merges Dependabot PRs automatically after tests pass
+- **Smart Versioning**: Determines version bumps based on PR labels and commit messages
+- **Automated Releases**: Creates tags and releases with categorized changelogs
+- **Release Notifications**: Sends notifications when new versions are released
+
+The automation system ensures that the module stays up-to-date with minimal manual intervention, handling everything from dependency updates to versioning and release notes generation.
 
 ## Contributing
 
