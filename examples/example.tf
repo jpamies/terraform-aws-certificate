@@ -3,17 +3,24 @@ provider "aws" {
 }
 
 variable "domain_zone_id" {
+  type        = string
+  description = "Route53 Zone ID for the domain"
 }
 
 variable "domain" {
+  type        = string
+  description = "Main domain name for the certificate"
 }
 
 variable "alternate_domains" {
-  type = list(string)
+  type        = list(string)
+  description = "List of alternate domain names for the certificate"
 }
 
 variable "tags" {
-  default = {}
+  type        = map(string)
+  description = "Tags to apply to resources"
+  default     = {}
 }
 
 module "cert" {
@@ -22,30 +29,41 @@ module "cert" {
   subject_alternative_names = var.alternate_domains
   dns_zone_id               = var.domain_zone_id
   tags                      = var.tags
+  key_algorithm             = "RSA_2048"
+  validation_timeout        = "45m"
 }
 
 ######
-# AWS ELB using the certificate dinamically generated
+# AWS Load Balancer using the certificate dynamically generated
 ######
-resource "aws_elb" "bar" {
-  name               = "aws-cert-elb"
-  availability_zones = ["us-east-1a", "us-east-1b"]
+resource "aws_lb" "example" {
+  name               = "certificate-example-lb"
+  internal           = false
+  load_balancer_type = "application"
 
-  listener {
-    instance_port      = 80
-    instance_protocol  = "http"
-    lb_port            = 443
-    lb_protocol        = "https"
-    ssl_certificate_id = module.cert.arn
-  }
+  # Replace with your actual subnet IDs
+  subnets = ["subnet-12345678", "subnet-87654321"]
 
-  instances                   = []
-  cross_zone_load_balancing   = true
-  idle_timeout                = 400
-  connection_draining         = true
-  connection_draining_timeout = 400
+  enable_deletion_protection = false
 
   tags = {
-    Name = "cert-elb"
+    Name = "certificate-example"
+  }
+}
+
+resource "aws_lb_listener" "https" {
+  load_balancer_arn = aws_lb.example.arn
+  port              = "443"
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  certificate_arn   = module.cert.arn
+
+  default_action {
+    type = "fixed-response"
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "Hello from the certificate example!"
+      status_code  = "200"
+    }
   }
 }
