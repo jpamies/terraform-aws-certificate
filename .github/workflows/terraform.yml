@@ -73,7 +73,7 @@ jobs:
           echo "Module syntax has been validated in previous steps"
 
       - name: Update PR with Terraform Status
-        uses: actions/github-script@v6
+        uses: actions/github-script@v8
         if: github.event_name == 'pull_request'
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
