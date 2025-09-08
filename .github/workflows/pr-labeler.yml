@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v3
       
       - name: Label PR based on branch name
-        uses: actions/github-script@v6
+        uses: actions/github-script@v8
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -81,7 +81,7 @@ jobs:
       
       - name: Label Dependabot PRs
         if: ${{ github.actor == 'dependabot[bot]' }}
-        uses: actions/github-script@v6
+        uses: actions/github-script@v8
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
