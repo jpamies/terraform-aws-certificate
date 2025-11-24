@@ -15,7 +15,7 @@ jobs:
     
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
       
       - name: Label PR based on branch name
         uses: actions/github-script@v6
